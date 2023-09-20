@@ -1,4 +1,4 @@
-import { cloneElement, useEffect, useState } from "react";
+import { Children, cloneElement, useEffect, useState } from "react";
 
 const tempMovieData = [
   {
@@ -58,25 +58,33 @@ export default function App() {
   const [watched, setWatched] = useState(tempWatchedData);
   const [isOpen1, setIsOpen1] = useState(true);
   const [isOpen2, setIsOpen2] = useState(true);
-
+  const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
   const avgUserRating = average(watched.map((movie) => movie.userRating));
   const avgRuntime = average(watched.map((movie) => movie.runtime));
   useEffect(
     function () {
-      if (query.length < 3) return;
       async function getMovie() {
         try {
+          if (query.length === 0) return [setMovies([]), setMessage("")];
+          if (query.length < 3) return;
+          setMessage("Loading...");
+          setIsLoading(true);
           const res = await fetch(
             `http://www.omdbapi.com/?apikey=37674080&s=${query}`
           );
-          if (!res.ok) throw new Error("Faild Fetch");
+          if (!res.ok) throw new Error("Faild Fetch ❗");
           const data = await res.json();
 
-          if (data.Response === "False") throw new Error("cannot find movie");
+          if (data.Response === "False")
+            throw new Error("cannot find movie ⛔");
           setMovies(data.Search);
+          setIsLoading(false);
         } catch (err) {
+          setMessage(err.message);
           console.error(err.message);
+          setMovies([]);
         }
       }
       getMovie();
@@ -111,20 +119,23 @@ export default function App() {
             {isOpen1 ? "–" : "+"}
           </button>
           {isOpen1 && (
-            <ul className="list">
-              {movies?.map((movie) => (
-                <li key={movie.imdbID}>
-                  <img src={movie.Poster} alt={`${movie.Title} poster`} />
-                  <h3>{movie.Title}</h3>
-                  <div>
-                    <p>
-                      <span>🗓</span>
-                      <span>{movie.Year}</span>
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ul>
+            <>
+              {isLoading && <Loader>{message}</Loader>}
+              <ul className="list">
+                {movies?.map((movie) => (
+                  <li key={movie.imdbID}>
+                    <img src={movie.Poster} alt={`${movie.Title} poster`} />
+                    <h3>{movie.Title}</h3>
+                    <div>
+                      <p>
+                        <span>🗓</span>
+                        <span>{movie.Year}</span>
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </>
           )}
         </div>
 
@@ -187,4 +198,8 @@ export default function App() {
       </main>
     </>
   );
+}
+
+function Loader({ children }) {
+  return <p className="loader">{children}</p>;
 }
