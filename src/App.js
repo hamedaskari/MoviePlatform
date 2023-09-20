@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { cloneElement, useEffect, useState } from "react";
 
 const tempMovieData = [
   {
@@ -52,7 +52,9 @@ const average = (arr) =>
 
 export default function App() {
   const [query, setQuery] = useState("");
-  const [movies, setMovies] = useState(tempMovieData);
+  // eslint-disable-next-line
+  const [movies, setMovies] = useState([]);
+  // eslint-disable-next-line
   const [watched, setWatched] = useState(tempWatchedData);
   const [isOpen1, setIsOpen1] = useState(true);
   const [isOpen2, setIsOpen2] = useState(true);
@@ -60,7 +62,27 @@ export default function App() {
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
   const avgUserRating = average(watched.map((movie) => movie.userRating));
   const avgRuntime = average(watched.map((movie) => movie.runtime));
+  useEffect(
+    function () {
+      if (query.length < 3) return;
+      async function getMovie() {
+        try {
+          const res = await fetch(
+            `http://www.omdbapi.com/?apikey=37674080&s=${query}`
+          );
+          if (!res.ok) throw new Error("Faild Fetch");
+          const data = await res.json();
 
+          if (data.Response === "False") throw new Error("cannot find movie");
+          setMovies(data.Search);
+        } catch (err) {
+          console.error(err.message);
+        }
+      }
+      getMovie();
+    },
+    [query]
+  );
   return (
     <>
       <nav className="nav-bar">
