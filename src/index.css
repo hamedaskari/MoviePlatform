@@ -155,7 +155,7 @@ body {
   column-gap: 2.4rem;
   font-size: 1.6rem;
   align-items: center;
-
+  cursor: pointer;
   padding: 1.6rem 3.2rem;
   border-bottom: 1px solid var(--color-background-100);
 }

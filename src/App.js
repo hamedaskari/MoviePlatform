@@ -1,28 +1,5 @@
-import { Children, cloneElement, useEffect, useState } from "react";
-
-const tempMovieData = [
-  {
-    imdbID: "tt1375666",
-    Title: "Inception",
-    Year: "2010",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
-  },
-  {
-    imdbID: "tt0133093",
-    Title: "The Matrix",
-    Year: "1999",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
-  },
-  {
-    imdbID: "tt6751668",
-    Title: "Parasite",
-    Year: "2019",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
-  },
-];
+import { useEffect, useState } from "react";
+import StarRating from "./StarRating";
 
 const tempWatchedData = [
   {
@@ -63,6 +40,12 @@ export default function App() {
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
   const avgUserRating = average(watched.map((movie) => movie.userRating));
   const avgRuntime = average(watched.map((movie) => movie.runtime));
+  const [imdbID, setImdbId] = useState("");
+  function handleClickMovie(movieId) {
+    setImdbId(movieId);
+    return console.log(movieId);
+  }
+
   useEffect(
     function () {
       async function getMovie() {
@@ -121,9 +104,12 @@ export default function App() {
           {isOpen1 && (
             <>
               {isLoading && <Loader>{message}</Loader>}
-              <ul className="list">
+              <ul className="list list-movies">
                 {movies?.map((movie) => (
-                  <li key={movie.imdbID}>
+                  <li
+                    key={movie.imdbID}
+                    onClick={() => handleClickMovie(movie.imdbID)}
+                  >
                     <img src={movie.Poster} alt={`${movie.Title} poster`} />
                     <h3>{movie.Title}</h3>
                     <div>
@@ -169,7 +155,7 @@ export default function App() {
                   </p>
                 </div>
               </div>
-
+              <MovieDetails movieId={imdbID} isLoading={isLoading} />
               <ul className="list">
                 {watched.map((movie) => (
                   <li key={movie.imdbID}>
@@ -202,4 +188,58 @@ export default function App() {
 
 function Loader({ children }) {
   return <p className="loader">{children}</p>;
+}
+
+function MovieDetails({ isLoading, movieId }) {
+  useEffect(
+    function () {
+      async function getMovieById() {
+        const res = await fetch(
+          `http://www.omdbapi.com/?apikey=37674080&i=${movieId}`
+        );
+        const data = await res.json();
+        console.log(data);
+      }
+      getMovieById();
+    },
+
+    [movieId]
+  );
+  return (
+    <div className="details">
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <header>
+            <button className="btn-back">&larr;</button>
+            <img alt={`Poster of name movie`} />
+            <div className="details-overview">
+              <h2>Title</h2>
+              <p>Description &bull; time</p>
+              <p>ganre</p>
+              <p>
+                <span>⭐️</span>
+                9.5 IMDb rating
+              </p>
+            </div>
+          </header>
+          <section>
+            <div className="rating">
+              <>
+                <StarRating maxRating={10} size={24} />
+
+                <button className="btn-add">+ Add to list</button>
+              </>
+            </div>
+            <p>
+              <em>kirkhar</em>
+            </p>
+            <p>Starring misha cross</p>
+            <p>Directed by christopher nolan</p>
+          </section>
+        </>
+      )}
+    </div>
+  );
 }
