@@ -184,12 +184,14 @@ export default function App() {
                 ))}
               </ul>
             </>
-          ) : (
+          ) : isOpen2 ? (
             <MovieDetails
               movieId={imdbID}
               watched={watched}
               onAddWatched={handleAddWatched}
             />
+          ) : (
+            false
           )}
         </div>
       </main>
