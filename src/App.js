@@ -29,9 +29,7 @@ const average = (arr) =>
 
 export default function App() {
   const [query, setQuery] = useState("");
-  // eslint-disable-next-line
   const [movies, setMovies] = useState([]);
-  // eslint-disable-next-line
   const [watched, setWatched] = useState([]);
   const [isOpen1, setIsOpen1] = useState(true);
   const [isOpen2, setIsOpen2] = useState(true);
@@ -227,9 +225,6 @@ function MovieDetails({ movieId, onAddWatched, watched, onCloseBtn }) {
   const [movieDetails, setMovieDetails] = useState("");
   const [rate, setRate] = useState(0);
   const [isUserRated, setIsUserRated] = useState(false);
-  function handleClickBack() {
-    onCloseBtn();
-  }
   const isWatched = watched.map((movie) => movie.imdbID).includes(movieId);
   const watchedUserRating = watched.find(
     (movie) => movie.imdbID === movieId
@@ -278,7 +273,22 @@ function MovieDetails({ movieId, onAddWatched, watched, onCloseBtn }) {
 
     [movieId]
   );
+  useEffect(
+    function () {
+      function callback(e) {
+        if (e.code === "Escape") {
+          onCloseBtn();
+        }
+      }
 
+      document.addEventListener("keydown", callback);
+
+      return function () {
+        document.removeEventListener("keydown", callback);
+      };
+    },
+    [onCloseBtn]
+  );
   return (
     <div className="details">
       {isLoading ? (
@@ -286,7 +296,7 @@ function MovieDetails({ movieId, onAddWatched, watched, onCloseBtn }) {
       ) : (
         <>
           <header>
-            <button className="btn-back" onClick={() => handleClickBack()}>
+            <button className="btn-back" onClick={onCloseBtn}>
               &larr;
             </button>
             <img alt={`Poster of ${movieDetails} movie`} src={poster} />
