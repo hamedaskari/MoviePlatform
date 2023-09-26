@@ -55,15 +55,22 @@ export default function App() {
   console.log(watched);
   useEffect(
     function () {
+      const controller = new AbortController();
+
       async function getMovie() {
         try {
           if (query.length === 0)
             return [setMovies([]), setMessage(""), setImdbId("")];
-          if (query.length < 3) return;
+          if (query.length < 3) {
+            setMovies([]);
+            setMessage("");
+            return;
+          }
           setMessage("Loading...");
           setIsLoading(true);
           const res = await fetch(
-            `http://www.omdbapi.com/?apikey=37674080&s=${query}`
+            `http://www.omdbapi.com/?apikey=37674080&s=${query}`,
+            { signal: controller.signal }
           );
           if (!res.ok) throw new Error("Faild Fetch ❗");
           const data = await res.json();
@@ -73,8 +80,11 @@ export default function App() {
           setMovies(data.Search);
           setIsLoading(false);
         } catch (err) {
-          setMessage(err.message);
-          console.error(err.message);
+          if (err.name !== "AbortError") {
+            console.log(err.message);
+            setMessage(err.message);
+          }
+
           setMovies([]);
         }
       }
