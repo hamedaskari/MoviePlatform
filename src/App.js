@@ -52,6 +52,9 @@ export default function App() {
   function handleDeleteWatched(id) {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   }
+  function handleCloseMovie() {
+    setImdbId("");
+  }
   console.log(watched);
   useEffect(
     function () {
@@ -205,6 +208,7 @@ export default function App() {
             </>
           ) : isOpen2 ? (
             <MovieDetails
+              onCloseBtn={handleCloseMovie}
               movieId={imdbID}
               watched={watched}
               onAddWatched={handleAddWatched}
@@ -218,12 +222,14 @@ export default function App() {
   );
 }
 
-function MovieDetails({ movieId, onAddWatched, watched }) {
+function MovieDetails({ movieId, onAddWatched, watched, onCloseBtn }) {
   const [isLoading, setIsLoading] = useState(false);
   const [movieDetails, setMovieDetails] = useState("");
   const [rate, setRate] = useState(0);
   const [isUserRated, setIsUserRated] = useState(false);
-
+  function handleClickBack() {
+    onCloseBtn();
+  }
   const isWatched = watched.map((movie) => movie.imdbID).includes(movieId);
   const watchedUserRating = watched.find(
     (movie) => movie.imdbID === movieId
@@ -280,7 +286,9 @@ function MovieDetails({ movieId, onAddWatched, watched }) {
       ) : (
         <>
           <header>
-            <button className="btn-back">&larr;</button>
+            <button className="btn-back" onClick={() => handleClickBack()}>
+              &larr;
+            </button>
             <img alt={`Poster of ${movieDetails} movie`} src={poster} />
             <div className="details-overview">
               <h2>{title}</h2>
