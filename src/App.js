@@ -49,6 +49,9 @@ export default function App() {
   function handleAddWatched(movie) {
     setWatched((currentArr) => [...currentArr, movie]);
   }
+  function handleDeleteWatched(id) {
+    setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
+  }
   console.log(watched);
   useEffect(
     function () {
@@ -179,6 +182,12 @@ export default function App() {
                         <span>⏳</span>
                         <span>{movie.runtime}</span>
                       </p>
+                      <button
+                        className="btn-delete"
+                        onClick={() => handleDeleteWatched(movie.imdbID)}
+                      >
+                        X
+                      </button>
                     </div>
                   </li>
                 ))}
