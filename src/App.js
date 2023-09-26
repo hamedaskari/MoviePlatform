@@ -39,10 +39,10 @@ export default function App() {
   const avgUserRating = average(watched.map((movie) => movie.userRating));
   const avgRuntime = average(watched.map((movie) => movie.runtime.slice(0, 3)));
   const [imdbID, setImdbId] = useState("");
-  console.log(imdbID);
+
   function handleClickMovie(movieId) {
     setImdbId(movieId);
-    return console.log(movieId);
+    return;
   }
   function handleAddWatched(movie) {
     setWatched((currentArr) => [...currentArr, movie]);
@@ -53,7 +53,7 @@ export default function App() {
   function handleCloseMovie() {
     setImdbId("");
   }
-  console.log(watched);
+
   useEffect(
     function () {
       const controller = new AbortController();
@@ -231,7 +231,6 @@ function MovieDetails({ movieId, onAddWatched, watched, onCloseBtn }) {
   )?.userRating;
   const {
     Title: title,
-    Year: year,
     Poster: poster,
     Runtime: runtime,
     imdbRating,
@@ -313,7 +312,7 @@ function MovieDetails({ movieId, onAddWatched, watched, onCloseBtn }) {
               </p>
             </div>
           </header>
-          {console.log(isUserRated)}
+
           <section>
             <div className="rating">
               {!isWatched ? (
