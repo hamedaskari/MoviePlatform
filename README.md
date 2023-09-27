@@ -1,6 +1,9 @@
 # Program environment
 
-# Getting Started with Create React App
+![Screenshot (95)](https://github.com/hamedaskari/MoviePlatform/assets/63067445/ff1188bf-f707-4ad9-b9ba-e44df05a8f8f)
+
+
+# Getting Started
 "This version is not responsive yet, but I will soon release a responsive version of it."
 
 Sure, here's a brief explanation of how the program works:
