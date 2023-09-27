@@ -1,70 +1,35 @@
 # Getting Started with Create React App
+Sure, here's a brief explanation of how the program works:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# 1. Inputs:
+   - The program uses `useState` and `useEffect` from the React library to manage state and perform operations after rendering in the main `App` component.
 
-## Available Scripts
+# 2.`App`:
+   - `useState` is used to manage various states in the program, such as user input (`query`), a list of movies (`movies`), a list of watched movies (`watched`), and more.
+   - `useEffect` is used to make requests to the OMDB API based on user search (`query`) and to store the watched list in local storage.
+   - Various functions are used to manage different features of the program, such as adding and deleting movies from the watched list and displaying movie details.
+   - In this component, there are two main sections: searching for movies and displaying details of a movie or the watched list.
 
-In the project directory, you can run:
+# 3. `MovieDetails`:
+   - A separate component that displays details of a movie and allows adding it to the watched list.
+   - Uses `useState` to manage various states related to displaying movie details and user ratings.
+   - Uses `useEffect` to request movie details from the OMDB API.
+   - Contains different sections for displaying images, titles, ratings, summaries, actors, and more.
 
-### `npm start`
+# 4. `Loader`:
+   - A simple component to display loading messages like "Loading..."
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# To use this program on GitHub, you can follow these steps:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. Clone or download the program code to your machine.
+2. In the project directory, use the following commands:
 
-### `npm test`
+   ```
+   npm install
+   npm start
+   ```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+   These commands will help you install the project and run it in your web browser.
 
-### `npm run build`
+By running this program, you can search for movies, view details of each movie, and add them to your watched list. Additionally, information about the watched list, including the number of movies, average IMDb rating, average user rating, and average runtime, is displayed.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
