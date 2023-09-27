@@ -8,12 +8,22 @@ export default function App() {
   // State variables
   const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
+  //Local Storage
+  const [watched, setWatched] = useState(function () {
+    const storedValue = localStorage.getItem("watched");
+    return JSON.parse(storedValue);
+  });
+
+  // const [watched, setWatched] = useState([]);
   const [isOpen1, setIsOpen1] = useState(true);
   const [isOpen2, setIsOpen2] = useState(true);
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [imdbID, setImdbId] = useState("");
+  // Calculate average IMDb rating, user rating, and runtime for watched movies
+  const avgImdbRating = average(watched.map((movie) => movie?.imdbRating));
+  const avgUserRating = average(watched.map((movie) => movie?.userRating));
+  const avgRuntime = average(watched.map((movie) => movie.runtime));
 
   // Function to handle click on a movie
   function handleClickMovie(movieId) {
@@ -35,7 +45,13 @@ export default function App() {
   function handleCloseMovie() {
     setImdbId("");
   }
-
+  //Local Storage
+  useEffect(
+    function () {
+      localStorage.setItem("watched", JSON.stringify(watched));
+    },
+    [watched]
+  );
   // Fetch movies based on the query
   useEffect(
     function () {
@@ -76,11 +92,6 @@ export default function App() {
     },
     [query]
   );
-
-  // Calculate average IMDb rating, user rating, and runtime for watched movies
-  const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
-  const avgUserRating = average(watched.map((movie) => movie.userRating));
-  const avgRuntime = average(watched.map((movie) => movie.runtime.slice(0, 3)));
 
   return (
     <>
