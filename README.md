@@ -1,4 +1,6 @@
 # Getting Started with Create React App
+"This version is not responsive yet, but I will soon release a responsive version of it."
+
 Sure, here's a brief explanation of how the program works:
 
 # 1. Inputs:
