@@ -1,33 +1,11 @@
 import { useEffect, useState } from "react";
 import StarRating from "./StarRating";
 
-const tempWatchedData = [
-  {
-    imdbID: "tt1375666",
-    Title: "Inception",
-    Year: "2010",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
-    runtime: 148,
-    imdbRating: 8.8,
-    userRating: 10,
-  },
-  {
-    imdbID: "tt0088763",
-    Title: "Back to the Future",
-    Year: "1985",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BZmU0M2Y1OGUtZjIxNi00ZjBkLTg1MjgtOWIyNThiZWIwYjRiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg",
-    runtime: 116,
-    imdbRating: 8.5,
-    userRating: 9,
-  },
-];
-
-const average = (arr) =>
-  arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
+// Function to calculate average of an array
+const average = (arr) => arr.reduce((acc, cur) => acc + cur / arr.length, 0);
 
 export default function App() {
+  // State variables
   const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
@@ -35,25 +13,30 @@ export default function App() {
   const [isOpen2, setIsOpen2] = useState(true);
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
-  const avgUserRating = average(watched.map((movie) => movie.userRating));
-  const avgRuntime = average(watched.map((movie) => movie.runtime.slice(0, 3)));
   const [imdbID, setImdbId] = useState("");
 
+  // Function to handle click on a movie
   function handleClickMovie(movieId) {
     setImdbId(movieId);
     return;
   }
+
+  // Function to add a movie to the watched list
   function handleAddWatched(movie) {
     setWatched((currentArr) => [...currentArr, movie]);
   }
+
+  // Function to delete a movie from the watched list
   function handleDeleteWatched(id) {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   }
+
+  // Function to close the movie details view
   function handleCloseMovie() {
     setImdbId("");
   }
 
+  // Fetch movies based on the query
   useEffect(
     function () {
       const controller = new AbortController();
@@ -73,11 +56,11 @@ export default function App() {
             `http://www.omdbapi.com/?apikey=37674080&s=${query}`,
             { signal: controller.signal }
           );
-          if (!res.ok) throw new Error("Faild Fetch ❗");
+          if (!res.ok) throw new Error("Failed Fetch ❗");
           const data = await res.json();
 
           if (data.Response === "False")
-            throw new Error("cannot find movie ⛔");
+            throw new Error("Cannot find movie ⛔");
           setMovies(data.Search);
           setIsLoading(false);
         } catch (err) {
@@ -93,8 +76,15 @@ export default function App() {
     },
     [query]
   );
+
+  // Calculate average IMDb rating, user rating, and runtime for watched movies
+  const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
+  const avgUserRating = average(watched.map((movie) => movie.userRating));
+  const avgRuntime = average(watched.map((movie) => movie.runtime.slice(0, 3)));
+
   return (
     <>
+      {/* Navigation bar */}
       <nav className="nav-bar">
         <div className="logo">
           <span role="img">🍿</span>
@@ -112,7 +102,9 @@ export default function App() {
         </p>
       </nav>
 
+      {/* Main content */}
       <main className="main">
+        {/* Box 1: Movie search results */}
         <div className="box">
           <button
             className="btn-toggle"
@@ -144,6 +136,7 @@ export default function App() {
           )}
         </div>
 
+        {/* Box 2: Movie details or watched movies */}
         <div className="box">
           <button
             className="btn-toggle"
@@ -153,6 +146,7 @@ export default function App() {
           </button>
           {isOpen2 && imdbID === "" ? (
             <>
+              {/* Display statistics for watched movies */}
               <div className="summary">
                 <h2>Movies you watched</h2>
                 <div>
@@ -175,6 +169,7 @@ export default function App() {
                 </div>
               </div>
 
+              {/* List of watched movies */}
               <ul className="list">
                 {watched.map((movie) => (
                   <li key={movie.imdbID}>
@@ -205,6 +200,7 @@ export default function App() {
               </ul>
             </>
           ) : isOpen2 ? (
+            // Display movie details when IMDb ID is set
             <MovieDetails
               onCloseBtn={handleCloseMovie}
               movieId={imdbID}
@@ -220,15 +216,22 @@ export default function App() {
   );
 }
 
+// MovieDetails component
 function MovieDetails({ movieId, onAddWatched, watched, onCloseBtn }) {
+  // State variables for movie details
   const [isLoading, setIsLoading] = useState(false);
   const [movieDetails, setMovieDetails] = useState("");
   const [rate, setRate] = useState(0);
-  const [isUserRated, setIsUserRated] = useState(false);
+
+  // Check if the movie is in the watched list
   const isWatched = watched.map((movie) => movie.imdbID).includes(movieId);
+
+  // Get user rating for the watched movie
   const watchedUserRating = watched.find(
     (movie) => movie.imdbID === movieId
   )?.userRating;
+
+  // Destructure movieDetails object for easier access
   const {
     Title: title,
     Poster: poster,
@@ -241,6 +244,7 @@ function MovieDetails({ movieId, onAddWatched, watched, onCloseBtn }) {
     Genre: genre,
   } = movieDetails;
 
+  // Function to add a movie to the watched list
   function handleAddWatched() {
     const watchedMovie = {
       Title: title,
@@ -251,9 +255,11 @@ function MovieDetails({ movieId, onAddWatched, watched, onCloseBtn }) {
       runtime: runtime,
     };
     onAddWatched(watchedMovie);
-    setIsUserRated(true);
+
     setRate(0);
   }
+
+  // Fetch movie details by IMDb ID
   useEffect(
     function () {
       async function getMovieById() {
@@ -269,9 +275,10 @@ function MovieDetails({ movieId, onAddWatched, watched, onCloseBtn }) {
       }
       getMovieById();
     },
-
     [movieId]
   );
+
+  // Handle closing the movie details view
   useEffect(
     function () {
       function callback(e) {
@@ -288,12 +295,15 @@ function MovieDetails({ movieId, onAddWatched, watched, onCloseBtn }) {
     },
     [onCloseBtn]
   );
+
   return (
     <div className="details">
       {isLoading ? (
+        // Display loading message while fetching movie details
         <Loader>Loading...</Loader>
       ) : (
         <>
+          {/* Header section with movie details */}
           <header>
             <button className="btn-back" onClick={onCloseBtn}>
               &larr;
@@ -313,9 +323,11 @@ function MovieDetails({ movieId, onAddWatched, watched, onCloseBtn }) {
             </div>
           </header>
 
+          {/* Movie details section */}
           <section>
             <div className="rating">
               {!isWatched ? (
+                // Display star rating component for adding a movie to watched list
                 <>
                   <StarRating maxRating={10} size={24} onSetRating={setRate} />
                   {rate > 0 && (
@@ -328,6 +340,7 @@ function MovieDetails({ movieId, onAddWatched, watched, onCloseBtn }) {
                   )}
                 </>
               ) : (
+                // Display user rating if the movie is already in the watched list
                 <p>
                   You rated with movie {watchedUserRating} <span>⭐️</span>
                 </p>
@@ -344,6 +357,8 @@ function MovieDetails({ movieId, onAddWatched, watched, onCloseBtn }) {
     </div>
   );
 }
+
+// Loader component
 function Loader({ children }) {
   return <p className="loader">{children}</p>;
 }
