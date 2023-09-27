@@ -1,3 +1,5 @@
+# Program environment
+
 # Getting Started with Create React App
 "This version is not responsive yet, but I will soon release a responsive version of it."
 
@@ -35,3 +37,17 @@ Sure, here's a brief explanation of how the program works:
 
 By running this program, you can search for movies, view details of each movie, and add them to your watched list. Additionally, information about the watched list, including the number of movies, average IMDb rating, average user rating, and average runtime, is displayed.
 
+# error handling
+In this program, error handling has been thoughtfully implemented to enhance the user experience and robustness of the application. The following scenarios are considered and managed:
+
+1. **API Request Errors:** When making requests to the OMDB API, the program checks for HTTP errors (e.g., 404 Not Found) and handles them gracefully. If there is an issue with the API request, an error message is displayed to the user.
+
+2. **Empty Query:** If the user attempts to search with an empty query, the program prevents unnecessary API requests and provides a user-friendly message.
+
+3. **Short Query:** For queries with fewer than three characters, the program responds by clearing the movie list and displaying a message to inform the user.
+
+4. **Movie Not Found:** If the API response indicates that a movie cannot be found, the program displays an error message to alert the user.
+
+5. **Abort Errors:** When a user navigates away from the page or cancels a pending API request, the program gracefully handles the "AbortError" and prevents any further processing.
+
+These error-handling mechanisms ensure that users receive meaningful feedback and can interact with the application without encountering unexpected issues. This proactive approach to error management enhances the overall user experience and ensures the application's reliability.
