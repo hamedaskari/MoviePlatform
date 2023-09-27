@@ -23,7 +23,7 @@ export default function App() {
   // Calculate average IMDb rating, user rating, and runtime for watched movies
   const avgImdbRating = average(watched.map((movie) => movie?.imdbRating));
   const avgUserRating = average(watched.map((movie) => movie?.userRating));
-  const avgRuntime = average(watched.map((movie) => movie.runtime));
+  const avgRuntime = average(watched.map((movie) => movie.runtime.slice(0, 3)));
 
   // Function to handle click on a movie
   function handleClickMovie(movieId) {
