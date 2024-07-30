@@ -41,7 +41,7 @@ export default function App() {
     setImdbId(movieId);
     return;
   }
-  console.log(watched);
+
   // Function to add a movie to the watched list
   function handleAddWatched(movie) {
     setWatched((currentArr) => [...currentArr, movie]);
