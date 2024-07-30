@@ -20,7 +20,7 @@ export default function App() {
       return storedValue ? JSON.parse(storedValue) : [];
     } catch (error) {
       console.error("Error parsing JSON from localStorage:", error);
-      return []; // در صورت بروز خطا، آرایه خالی برگردانید
+      return [];
     }
   });
   // const [watched, setWatched] = useState([]);
@@ -44,7 +44,6 @@ export default function App() {
   console.log(watched);
   // Function to add a movie to the watched list
   function handleAddWatched(movie) {
-    console.log(movie);
     setWatched((currentArr) => [...currentArr, movie]);
   }
 
